@@ -12,6 +12,7 @@ class requestForms extends frontControllerApplication
 			'database' => 'requestforms',
 			'table' => 'requestforms',
 			'administrators' => true,
+			'useCamUniLookup' => true,
 		);
 		
 		# Return the defaults
@@ -64,6 +65,7 @@ class requestForms extends frontControllerApplication
 		-- Election form
 		CREATE TABLE IF NOT EXISTS `election` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
+		  `submittedBy` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Your username (@cam.ac.uk)',
 		  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Election name',
 		  `returningOfficers` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Usernames (@cam.ac.uk) of Returning Officer(s)',
 		  `type` enum('','Society election','JCR election','MCR election','CUSU election','Faculty election') COLLATE utf8_unicode_ci NOT NULL COMMENT 'Type',
@@ -82,8 +84,8 @@ class requestForms extends frontControllerApplication
 		-- Manager form
 		CREATE TABLE IF NOT EXISTS `manager` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
-		  `crsid` varchar(10) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Username (@cam.ac.uk)',
-		  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Name',
+		  `submittedBy` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Your username (@cam.ac.uk)',
+		  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Your name',
 		  `confirm` int(1) NOT NULL COMMENT 'I confirm I have the right to administrate this group',
 		  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created at (automatic timestamp)',
 		  PRIMARY KEY (`id`)
@@ -92,6 +94,7 @@ class requestForms extends frontControllerApplication
 		-- Society form
 		CREATE TABLE IF NOT EXISTS `society` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
+		  `submittedBy` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Your username (@cam.ac.uk)',
 		  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Society name',
 		  `category` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Category',
 		  `description` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Description',
@@ -213,6 +216,10 @@ class requestForms extends frontControllerApplication
 		}
 		
 		# Standard overrides to form structure
+		$attributes['submittedBy']['type'] = 'email';
+		$attributes['submittedBy']['default'] = $this->user . '@cam.ac.uk';
+		$attributes['submittedBy']['editable'] = false;
+		$attributes['name']['default'] = $this->userName;
 		$attributes['file']['directory'] = '/tmp/';
 		$attributes['file']['attachment'] = true;
 		
