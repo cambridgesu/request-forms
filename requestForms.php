@@ -75,6 +75,7 @@ class requestForms extends frontControllerApplication
 		  `endTime` time NOT NULL COMMENT 'End time',
 		  `electoralRoll` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Electoral roll (list of usernames, one per line)',
 		  `file` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Manifestos - please upload file containing each manifesto',
+		  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created at (automatic timestamp)',
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Request to add an election';
 		
@@ -84,6 +85,7 @@ class requestForms extends frontControllerApplication
 		  `crsid` varchar(10) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Username (@cam.ac.uk)',
 		  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Name',
 		  `confirm` int(1) NOT NULL COMMENT 'I confirm I have the right to administrate this group',
+		  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created at (automatic timestamp)',
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Request to be a society or group manager';
 		
@@ -100,6 +102,7 @@ class requestForms extends frontControllerApplication
 		  `membershipCost` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Cost of membership',
 		  `membershipLength` enum('','Annual','Term') COLLATE utf8_unicode_ci NOT NULL COMMENT 'Length of memberships to be available',
 		  `person` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Society Administrator/President (full name required)',
+		  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created at (automatic timestamp)',
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Request to add a society or club';
 		";
