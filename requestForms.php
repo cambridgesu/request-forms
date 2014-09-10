@@ -251,7 +251,7 @@ class requestForms extends frontControllerApplication
 		# Define overrides
 		$dataBindingSettingsOverrides = array (
 			'attributes' => array (
-				'welcomeTextHtml' => array ('editorToolbarSet' => 'Basic', 'width' => 500, ),
+				'welcomeTextHtml' => array ('editorToolbarSet' => 'Basic', 'width' => 500, 'height' => 175, ),
 			),
 		);
 		
