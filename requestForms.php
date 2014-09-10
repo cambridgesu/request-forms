@@ -184,14 +184,27 @@ class requestForms extends frontControllerApplication
 		$html .= $this->settings['welcomeTextHtml'];
 		
 		# Show a list of the available forms
+		$html .= $this->formsList ('requestformslist boxylist');
+		
+		# Show the HTML
+		echo $html;
+	}
+	
+	
+	# Function to create a list of forms
+	public function formsList ($cssClass = false)
+	{
+		# Create the list
 		$list = array ();
 		foreach ($this->forms as $form => $title) {
 			$list[$form] = "<a href=\"{$this->baseUrl}/{$form}/\">" . htmlspecialchars ($title) . '</a>';
 		}
-		$html .= application::htmlUl ($list, false, 'requestformslist boxylist');
 		
-		# Show the HTML
-		echo $html;
+		# Compile the HTML
+		$html .= application::htmlUl ($list, false, $cssClass);
+		
+		# Return the HTML
+		return $html;
 	}
 	
 	
