@@ -68,8 +68,11 @@ class requestForms extends frontControllerApplication
 		-- Manager form
 		CREATE TABLE IF NOT EXISTS `manager` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
+		  `crsid` varchar(10) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Username (@cam.ac.uk)',
+		  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Name',
+		  `confirm` int(1) NOT NULL COMMENT 'I confirm I have the right to administrate this group',
 		  PRIMARY KEY (`id`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Request to be a society or group admin';
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Request to be a society or group manager';
 		
 		-- Society form
 		CREATE TABLE IF NOT EXISTS `society` (
