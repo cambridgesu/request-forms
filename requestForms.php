@@ -142,6 +142,7 @@ class requestForms extends frontControllerApplication
 	
 	
 	# Function to get datasource specifications for use in form fields
+	#!# These ought to be replaced with HTTP-level APIs
 	private function getDatasources ()
 	{
 		# Extract the definitions from the settings array
