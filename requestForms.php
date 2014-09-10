@@ -196,12 +196,19 @@ class requestForms extends frontControllerApplication
 			}
 		}
 		
+		# Standard overrides to form structure
+		$attributes['file']['directory'] = '/tmp/';
+		$attributes['file']['attachment'] = true;
+		
 		# Create the databinded form
 		require_once ('ultimateForm.php');
 		$form = new form (array (
 			'databaseConnection' => $this->databaseConnection,
 			'displayRestrictions' => false,
 			'autofocus' => true,
+			'picker' => true,
+			'cols' => 60,
+			'rows' => 10,
 		));
 		$form->dataBinding (array (
 			'database' => $this->settings['database'],
