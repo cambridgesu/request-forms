@@ -139,10 +139,12 @@ class requestForms extends frontControllerApplication
 				if (preg_match ('/^([^.]+)\.([^.]+)\.\[(.+)\]$/', $value, $valueMatches)) {
 					$table = strtolower ($matches[1]);
 					$field = strtolower ($matches[2]);
+					$fields = explode (',', $valueMatches[3], 2);
 					$datasources[$table][$field] = array (
 						'database' => $valueMatches[1],
 						'table' => $valueMatches[2],
-						'fields' => explode (',', $valueMatches[3]),
+						'fields' => $fields,
+						'orderBy' => array_pop ($fields),
 					);
 				}
 			}
@@ -189,7 +191,7 @@ class requestForms extends frontControllerApplication
 		# Determine any lookups required
 		if (isSet ($this->datasources[$table])) {
 			foreach ($this->datasources[$table] as $field => $datasource) {
-				$attributes[$field]['values'] = $this->databaseConnection->selectPairs ($datasource['database'], $datasource['table'], array (), $datasource['fields']);
+				$attributes[$field]['values'] = $this->databaseConnection->selectPairs ($datasource['database'], $datasource['table'], array (), $datasource['fields'], true, $datasource['orderBy']);
 				$attributes[$field]['type'] = 'select';
 			}
 		}
