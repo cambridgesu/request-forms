@@ -149,6 +149,7 @@ class requestForms extends frontControllerApplication
 		$form = new form (array (
 			'databaseConnection' => $this->databaseConnection,
 			'displayRestrictions' => false,
+			'autofocus' => true,
 		));
 		$form->dataBinding (array (
 			'database' => $this->settings['database'],
