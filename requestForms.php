@@ -247,7 +247,8 @@ class requestForms extends frontControllerApplication
 			return;
 		}
 		
-		application::dumpData ($result);
+		# Insert the submission into the database as a backup
+		$this->databaseConnection->insert ($this->settings['database'], $table, $result);
 		
 		# Show the HTML
 		echo $html;
