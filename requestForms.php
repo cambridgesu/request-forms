@@ -232,6 +232,7 @@ class requestForms extends frontControllerApplication
 			'picker' => true,
 			'cols' => 60,
 			'rows' => 10,
+			'formCompleteText' => 'Thank you for your submission. We will be in touch shortly.',
 		));
 		$form->dataBinding (array (
 			'database' => $this->settings['database'],
@@ -240,6 +241,7 @@ class requestForms extends frontControllerApplication
 			'int1ToCheckbox' => true,
 			'attributes' => $attributes,
 		));
+		$form->setOutputEmail ($this->settings['feedbackRecipient'], $this->settings['administratorEmail'], 'Website request form: ' . $this->forms[$table], NULL, 'submittedBy');
 		if (!$result = $form->process ($html)) {
 			echo $html;
 			return;
