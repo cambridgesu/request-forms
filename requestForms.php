@@ -88,6 +88,10 @@ class requestForms extends frontControllerApplication
 	{
 		# Get the list of forms
 		$this->forms = $this->getForms ();
+		
+		# Get datasource specifications for form fields
+		$this->datasources = $this->getDatasources ();
+		
 	}
 	
 	
@@ -111,6 +115,30 @@ class requestForms extends frontControllerApplication
 		
 		# Return the forms
 		return $forms;
+	}
+	
+	
+	# Function to get datasource specifications for use in form fields
+	private function getDatasources ()
+	{
+		# Extract the definitions from the settings array
+		$datasources = array ();
+		foreach ($this->settings as $setting => $value) {
+			if (preg_match ('/^datasource([A-Z][a-z]+)([A-Z][a-z]+)$/', $setting, $matches)) {
+				if (preg_match ('/^([^.]+)\.([^.]+)\.\[(.+)\]$/', $value, $valueMatches)) {
+					$table = strtolower ($matches[1]);
+					$field = strtolower ($matches[2]);
+					$datasources[$table][$field] = array (
+						'database' => $valueMatches[1],
+						'table' => $valueMatches[2],
+						'fields' => explode (',', $valueMatches[3]),
+					);
+				}
+			}
+		}
+		
+		# Return the datasources list
+		return $datasources;
 	}
 	
 	
@@ -144,6 +172,17 @@ class requestForms extends frontControllerApplication
 		# Add the title
 		$html .= "\n<h2>" . htmlspecialchars ($this->forms[$table]) . '</h2>';
 		
+		# Start databinding attributes
+		$attributes = array ();
+		
+		# Determine any lookups required
+		if (isSet ($this->datasources[$table])) {
+			foreach ($this->datasources[$table] as $field => $datasource) {
+				$attributes[$field]['values'] = $this->databaseConnection->selectPairs ($datasource['database'], $datasource['table'], array (), $datasource['fields']);
+				$attributes[$field]['type'] = 'select';
+			}
+		}
+		
 		# Create the databinded form
 		require_once ('ultimateForm.php');
 		$form = new form (array (
@@ -156,9 +195,7 @@ class requestForms extends frontControllerApplication
 			'table' => $table,
 			'intelligence' => true,
 			'int1ToCheckbox' => true,
-			'attributes' => array (
-				
-			),
+			'attributes' => $attributes,
 		));
 		if (!$result = $form->process ($html)) {
 			echo $html;
@@ -186,6 +223,5 @@ class requestForms extends frontControllerApplication
 		parent::settings ($dataBindingSettingsOverrides);
 	}
 }
-
 
 ?>
