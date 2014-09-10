@@ -56,6 +56,7 @@ class requestForms extends frontControllerApplication
 		  `feedbackRecipient` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'E-mail of feedback recipient',
 		  `welcomeTextHtml` text COLLATE utf8_unicode_ci COMMENT 'HTML fragment for welcome text',
 		  `datasourceSocietyCategory` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'societiesdirectory.categories.[id,name]' COMMENT 'Datasource for society form: category',
+		  `datasourceElectionCollege` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'bwp.overview.[college,name]' COMMENT 'Datasource for election form: college',
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Settings' AUTO_INCREMENT=2 ;
 		INSERT INTO `settings` (`id`, `feedbackRecipient`, `welcomeTextHtml`) VALUES (1, 'coordinator@" . "cusu.cam.ac.uk', '<p>With these forms, you can request CUSU staff to set up a new section for you on the new CUSU website.</p><p>Please note that requests will only be processed during office hours.</p>');
@@ -63,6 +64,17 @@ class requestForms extends frontControllerApplication
 		-- Election form
 		CREATE TABLE IF NOT EXISTS `election` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
+		  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Election name',
+		  `returningOfficers` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Usernames (@cam.ac.uk) of Returning Officer(s)',
+		  `type` enum('','Society election','JCR election','MCR election','CUSU election','Faculty election') COLLATE utf8_unicode_ci NOT NULL COMMENT 'Type',
+		  `studentGroup` set('Undergraduate','Graduate') COLLATE utf8_unicode_ci NOT NULL COMMENT 'Student group(s) eligible to vote',
+		  `college` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Limit to college members?',
+		  `startDate` date NOT NULL COMMENT 'Start date',
+		  `startTime` time NOT NULL COMMENT 'Start time',
+		  `endDate` date NOT NULL COMMENT 'End date',
+		  `endTime` time NOT NULL COMMENT 'End time',
+		  `electoralRoll` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Electoral roll (list of usernames, one per line)',
+		  `file` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Manifestos - please upload file containing each manifesto',
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Request to add an election';
 		
