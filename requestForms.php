@@ -24,7 +24,11 @@ class requestForms extends frontControllerApplication
 	{
 		# Define available tasks
 		$actions = array (
-			
+			'form' => array (
+				'description' => 'Form',
+				'url' => 'form/%1/',
+				'usetab' => 'home',
+			),
 		);
 		
 		# Return the actions
@@ -118,12 +122,19 @@ class requestForms extends frontControllerApplication
 		# Show a list of the available forms
 		$list = array ();
 		foreach ($this->forms as $form => $title) {
-			$list[$form] = "<a href=\"{$this->baseUrl}/forms/{$form}/\">" . htmlspecialchars ($title) . '</a>';
+			$list[$form] = "<a href=\"{$this->baseUrl}/{$form}/\">" . htmlspecialchars ($title) . '</a>';
 		}
 		$html .= application::htmlUl ($list, false, 'requestformslist boxylist');
 		
 		# Show the HTML
 		echo $html;
+	}
+	
+	
+	# Form page
+	public function form ($form)
+	{
+		echo $form;
 	}
 	
 	

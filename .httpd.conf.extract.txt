@@ -17,6 +17,7 @@
 	Use MacroFrontControllerApplication "$baseUrl/" "Request forms"
 	
 	# Application routing
-	
+	RewriteRule ^$baseUrl/([a-z]+)/$ $baseUrl/index.html?action=form&item=$1 [L,QSA]
+	RewriteRule ^$baseUrl/([a-z]+)$ $baseUrl/$1/ [L,R=301]
 	
 </Macro>
