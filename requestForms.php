@@ -1,0 +1,105 @@
+<?php
+
+# Request forms application
+require_once ('frontControllerApplication.php');
+class requestForms extends frontControllerApplication
+{
+	# Function to assign defaults
+	public function defaults ()
+	{
+		# Specify available arguments as defaults or as NULL (to represent a required argument)
+		$defaults = array (
+			'database' => 'requestforms',
+			'table' => 'requestforms',
+		);
+		
+		# Return the defaults
+		return $defaults;
+	}
+	
+	
+	# Function to assign supported actions
+	public function actions ()
+	{
+		# Define available tasks
+		$actions = array (
+			
+		);
+		
+		# Return the actions
+		return $actions;
+	}
+	
+	
+	# Define the database structure
+	private function databaseStructure ()
+	{
+		return "
+		-- Election form
+		CREATE TABLE IF NOT EXISTS `election` (
+		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Request to add an election';
+		
+		-- Manager form
+		CREATE TABLE IF NOT EXISTS `manager` (
+		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Request to be a society or group admin';
+		
+		-- Society form
+		CREATE TABLE IF NOT EXISTS `society` (
+		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Request to add a society or club';
+		";
+	}
+	
+	
+	# Additional constructor processing
+	public function main ()
+	{
+		# Get the list of forms
+		$this->forms = $this->getForms ();
+	}
+	
+	
+	# Function to get the list of forms
+	private function getForms ()
+	{
+		# Get the list of tables and the comment for each
+		$tables = $this->databaseConnection->getTables ($this->settings['database']);
+		#!# Add getting comments as an option in getTables natively
+		$forms = array ();
+		foreach ($tables as $table) {
+			$forms[$table] = $this->databaseConnection->getTableComment ($this->settings['database'], $table);
+		}
+
+		# Return the forms
+		return $forms;
+	}
+	
+	
+	# Home page
+	public function home ()
+	{
+		# Start the HTML
+		$html = '';
+		
+		# Add introduction
+		$html .= "\n<p>With these forms, you can request CUSU staff to set up a new section for you on the new CUSU website.</p>";
+		
+		# Show a list of the available forms
+		$list = array ();
+		foreach ($this->forms as $form => $title) {
+			$list[$form] = "<a href=\"{$this->baseUrl}/forms/{$form}/\">" . htmlspecialchars ($title) . '</a>';
+		}
+		$html .= application::htmlUl ($list, false, 'boxylist');
+		
+		# Show the HTML
+		echo $html;
+	}
+}
+
+
+?>

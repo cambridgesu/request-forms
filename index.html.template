@@ -1,0 +1,15 @@
+<?php
+
+# Define the settings
+$settings = array (
+	
+	# Database credentials
+	'username' => 'database_username_here',
+	'password' => 'database_password_here',
+);
+
+# Run the application with the specified settings
+require_once ('requestForms.php');
+new requestForms ($settings);
+
+?>
