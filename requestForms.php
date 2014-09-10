@@ -9,9 +9,14 @@ class requestForms extends frontControllerApplication
 	{
 		# Specify available arguments as defaults or as NULL (to represent a required argument)
 		$defaults = array (
+			
+			# Main settings
 			'database' => 'requestforms',
 			'table' => 'requestforms',
 			'administrators' => true,
+			'apiUsername' => false,
+			
+			# Internal parameters
 			'useCamUniLookup' => true,
 		);
 		
@@ -281,6 +286,35 @@ class requestForms extends frontControllerApplication
 		
 		# Run the native settings page
 		parent::settings ($dataBindingSettingsOverrides);
+	}
+	
+	
+	# API call for dashboard
+	public function apiCall_dashboard ($username = NULL)
+	{
+		# Start the HTML
+		$html = '';
+		
+		# State that the service is enabled
+		$data['enabled'] = true;
+		
+		# Ensure a username is supplied
+		if (!$username) {
+			$data['error'] = 'No username was supplied.';
+			return $data;
+		}
+		
+		# Define description
+		$data['descriptionHtml'] = "<p>With these forms, you can request CUSU staff to set up a new section for you on the new CUSU website.</p>";
+		
+		# Add list of forms
+		$html .= $this->formsList ();
+		
+		# Register the HTML
+		$data['html'] = $html;
+		
+		# Return the data
+		return $data;
 	}
 }
 

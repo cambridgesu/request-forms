@@ -6,6 +6,9 @@ $settings = array (
 	# Database credentials
 	'username' => 'database_username_here',
 	'password' => 'database_password_here',
+	
+	# API
+	'apiUsername' => 'api_username_here',
 );
 
 # Run the application with the specified settings
