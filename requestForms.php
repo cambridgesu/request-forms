@@ -55,6 +55,7 @@ class requestForms extends frontControllerApplication
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key (ignored)',
 		  `feedbackRecipient` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'E-mail of feedback recipient',
 		  `welcomeTextHtml` text COLLATE utf8_unicode_ci COMMENT 'HTML fragment for welcome text',
+		  `datasourceSocietyCategory` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'societiesdirectory.categories.[id,name]' COMMENT 'Datasource for society form: category',
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Settings' AUTO_INCREMENT=2 ;
 		INSERT INTO `settings` (`id`, `feedbackRecipient`, `welcomeTextHtml`) VALUES (1, 'coordinator@" . "cusu.cam.ac.uk', '<p>With these forms, you can request CUSU staff to set up a new section for you on the new CUSU website.</p><p>Please note that requests will only be processed during office hours.</p>');
@@ -77,6 +78,16 @@ class requestForms extends frontControllerApplication
 		-- Society form
 		CREATE TABLE IF NOT EXISTS `society` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
+		  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Society name',
+		  `category` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Category',
+		  `description` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Description',
+		  `websiteUrl` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Website',
+		  `facebookUrl` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Facebook page',
+		  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'E-mail address of society',
+		  `sellMemberships` enum('','Yes','No','Not sure') COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Do you wish to sell memberships to your group online?',
+		  `membershipCost` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Cost of membership',
+		  `membershipLength` enum('','Annual','Term') COLLATE utf8_unicode_ci NOT NULL COMMENT 'Length of memberships to be available',
+		  `person` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Society Administrator/President (full name required)',
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Request to add a society or club';
 		";
