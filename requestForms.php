@@ -52,7 +52,7 @@ class requestForms extends frontControllerApplication
 		  `welcomeTextHtml` text COLLATE utf8_unicode_ci COMMENT 'HTML fragment for welcome text',
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Settings' AUTO_INCREMENT=2 ;
-		INSERT INTO `settings` (`id`, `feedbackRecipient`, `welcomeTextHtml`) VALUES (1, 'coordinator@" . "cusu.cam.ac.uk', '<p>Please note that requests will only be processed during office hours.</p>');
+		INSERT INTO `settings` (`id`, `feedbackRecipient`, `welcomeTextHtml`) VALUES (1, 'coordinator@" . "cusu.cam.ac.uk', '<p>With these forms, you can request CUSU staff to set up a new section for you on the new CUSU website.</p><p>Please note that requests will only be processed during office hours.</p>');
 
 		-- Election form
 		CREATE TABLE IF NOT EXISTS `election` (
@@ -112,15 +112,15 @@ class requestForms extends frontControllerApplication
 		# Start the HTML
 		$html = '';
 		
-		# Add introduction
-		$html .= "\n<p>With these forms, you can request CUSU staff to set up a new section for you on the new CUSU website.</p>";
+		# Add introduction HTML
+		$html .= $this->settings['welcomeTextHtml'];
 		
 		# Show a list of the available forms
 		$list = array ();
 		foreach ($this->forms as $form => $title) {
 			$list[$form] = "<a href=\"{$this->baseUrl}/forms/{$form}/\">" . htmlspecialchars ($title) . '</a>';
 		}
-		$html .= application::htmlUl ($list, false, 'boxylist');
+		$html .= application::htmlUl ($list, false, 'requestformslist boxylist');
 		
 		# Show the HTML
 		echo $html;
