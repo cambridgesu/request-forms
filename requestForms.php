@@ -28,6 +28,7 @@ class requestForms extends frontControllerApplication
 				'description' => false,
 				'url' => 'form/%1/',
 				'usetab' => 'home',
+				'authentication' => true,
 			),
 		);
 		
