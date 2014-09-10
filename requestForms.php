@@ -239,8 +239,9 @@ class requestForms extends frontControllerApplication
 		$attributes['submittedBy']['default'] = $this->user . '@cam.ac.uk';
 		$attributes['submittedBy']['editable'] = false;
 		$attributes['name']['default'] = $this->userName;
-		$attributes['file']['directory'] = '/tmp/';
-		$attributes['file']['attachment'] = true;
+		$attributes['file']['directory'] = $this->dataDirectory;
+		$attributes['file']['forcedFileName'] = $table . '_' . $this->user . '_' . date ('Y-m-d_H-i-s');
+		$attributes['file']['attachments'] = true;
 		
 		# Create the databinded form
 		require_once ('ultimateForm.php');
