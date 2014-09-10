@@ -25,7 +25,7 @@ class requestForms extends frontControllerApplication
 		# Define available tasks
 		$actions = array (
 			'form' => array (
-				'description' => 'Form',
+				'description' => false,
 				'url' => 'form/%1/',
 				'usetab' => 'home',
 			),
@@ -132,9 +132,38 @@ class requestForms extends frontControllerApplication
 	
 	
 	# Form page
-	public function form ($form)
+	public function form ($table)
 	{
-		echo $form;
+		# Start the HTML
+		$html = '';
+		
+		# Add the title
+		$html .= "\n<h2>" . htmlspecialchars ($this->forms[$table]) . '</h2>';
+		
+		# Create the databinded form
+		require_once ('ultimateForm.php');
+		$form = new form (array (
+			'databaseConnection' => $this->databaseConnection,
+			'displayRestrictions' => false,
+		));
+		$form->dataBinding (array (
+			'database' => $this->settings['database'],
+			'table' => $table,
+			'intelligence' => true,
+			'int1ToCheckbox' => true,
+			'attributes' => array (
+				
+			),
+		));
+		if (!$result = $form->process ($html)) {
+			echo $html;
+			return;
+		}
+		
+		application::dumpData ($result);
+		
+		# Show the HTML
+		echo $html;
 	}
 	
 	
