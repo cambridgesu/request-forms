@@ -71,6 +71,7 @@ class requestForms extends frontControllerApplication
 		  `type` enum('','Society election','JCR election','MCR election','CUSU election','Faculty election') COLLATE utf8_unicode_ci NOT NULL COMMENT 'Type',
 		  `studentGroup` set('Undergraduate','Graduate') COLLATE utf8_unicode_ci NOT NULL COMMENT 'Student group(s) eligible to vote',
 		  `college` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Limit to college members?',
+		  `candidates` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'List of positions (e.g. President) and candidates for each post',
 		  `startDate` date NOT NULL COMMENT 'Start date',
 		  `startTime` time NOT NULL COMMENT 'Start time',
 		  `endDate` date NOT NULL COMMENT 'End date',
