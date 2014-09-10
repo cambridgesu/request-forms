@@ -11,6 +11,7 @@ class requestForms extends frontControllerApplication
 		$defaults = array (
 			'database' => 'requestforms',
 			'table' => 'requestforms',
+			'administrators' => true,
 		);
 		
 		# Return the defaults
@@ -35,6 +36,15 @@ class requestForms extends frontControllerApplication
 	private function databaseStructure ()
 	{
 		return "
+		-- Administrators
+		CREATE TABLE IF NOT EXISTS `administrators` (
+		  `crsid` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+		  `active` enum('Y','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Y',
+		  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+		  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY (`crsid`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Administrators';
+		
 		-- Election form
 		CREATE TABLE IF NOT EXISTS `election` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
@@ -75,6 +85,13 @@ class requestForms extends frontControllerApplication
 			$forms[$table] = $this->databaseConnection->getTableComment ($this->settings['database'], $table);
 		}
 
+		# Set tables to exclude
+		#!# Ideally the list would be supplied to getTables() natively
+		$excludeTables = array ('administrators', );
+		foreach ($excludeTables as $table) {
+			unset ($forms[$table]);
+		}
+		
 		# Return the forms
 		return $forms;
 	}
