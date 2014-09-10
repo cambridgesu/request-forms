@@ -45,6 +45,15 @@ class requestForms extends frontControllerApplication
 		  PRIMARY KEY (`crsid`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Administrators';
 		
+		-- Settings
+		CREATE TABLE IF NOT EXISTS `settings` (
+		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key (ignored)',
+		  `feedbackRecipient` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'E-mail of feedback recipient',
+		  `welcomeTextHtml` text COLLATE utf8_unicode_ci COMMENT 'HTML fragment for welcome text',
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Settings' AUTO_INCREMENT=2 ;
+		INSERT INTO `settings` (`id`, `feedbackRecipient`, `welcomeTextHtml`) VALUES (1, 'coordinator@" . "cusu.cam.ac.uk', '<p>Please note that requests will only be processed during office hours.</p>');
+
 		-- Election form
 		CREATE TABLE IF NOT EXISTS `election` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
@@ -87,7 +96,7 @@ class requestForms extends frontControllerApplication
 
 		# Set tables to exclude
 		#!# Ideally the list would be supplied to getTables() natively
-		$excludeTables = array ('administrators', );
+		$excludeTables = array ('administrators', 'settings', );
 		foreach ($excludeTables as $table) {
 			unset ($forms[$table]);
 		}
@@ -115,6 +124,21 @@ class requestForms extends frontControllerApplication
 		
 		# Show the HTML
 		echo $html;
+	}
+	
+	
+	# Settings page
+	public function settings ($dataBindingSettingsOverrides = array ())
+	{
+		# Define overrides
+		$dataBindingSettingsOverrides = array (
+			'attributes' => array (
+				'welcomeTextHtml' => array ('editorToolbarSet' => 'Basic', 'width' => 500, ),
+			),
+		);
+		
+		# Run the native settings page
+		parent::settings ($dataBindingSettingsOverrides);
 	}
 }
 

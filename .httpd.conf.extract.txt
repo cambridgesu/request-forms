@@ -3,7 +3,7 @@
 # Load using:
 #	# Request forms
 #	Include /path/to/request-forms/.httpd.conf.extract.txt
-#	Use MacroRequestForms /requestforms /path/to/request-forms "/path/to/site/:/path/to/request-forms/:/path/to/php/libraries/"
+#	Use MacroRequestForms /requestforms /path/to/request-forms "/path/to/site/:/path/to/request-forms/:/path/to/php/libraries/:/path/to/ckeditor/"
 
 
 <Macro MacroRequestForms $baseUrl $includePath>
