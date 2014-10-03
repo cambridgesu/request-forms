@@ -16,6 +16,9 @@ class requestForms extends frontControllerApplication
 			'administrators' => true,
 			'apiUsername' => false,
 			
+			# Whether to hide any forms
+			'hideForms' => array (),
+			
 			# Internal parameters
 			'useCamUniLookup' => true,
 		);
@@ -174,6 +177,15 @@ class requestForms extends frontControllerApplication
 		$excludeTables = array ('administrators', 'settings', );
 		foreach ($excludeTables as $table) {
 			unset ($forms[$table]);
+		}
+		
+		# Hide any specified for now
+		if ($this->settings['hideForms']) {	// File-based setting, as an array
+			foreach ($this->settings['hideForms'] as $hideForm) {
+				if (isSet ($forms[$hideForm])) {
+					unset ($forms[$hideForm]);
+				}
+			}
 		}
 		
 		# Return the forms

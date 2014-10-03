@@ -9,6 +9,9 @@ $settings = array (
 	
 	# API
 	'apiUsername' => 'api_username_here',
+	
+	# Hiding of forms
+	'hideForms' => array (),
 );
 
 # Run the application with the specified settings
