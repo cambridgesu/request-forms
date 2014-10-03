@@ -61,6 +61,7 @@ class requestForms extends frontControllerApplication
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key (ignored)',
 		  `feedbackRecipient` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'E-mail of feedback recipient',
 		  `welcomeTextHtml` text COLLATE utf8_unicode_ci COMMENT 'HTML fragment for welcome text',
+		  `epaymentsTermsUrl` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'E-payments terms URL',
 		  `datasourceSocietyCategory` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'societiesdirectory.categories.[id,name]' COMMENT 'Datasource for society form: category',
 		  `datasourceElectionCollege` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'bwp.overview.[college,name]' COMMENT 'Datasource for election form: college',
 		  PRIMARY KEY (`id`)
@@ -86,6 +87,29 @@ class requestForms extends frontControllerApplication
 		  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created at (automatic timestamp)',
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Request to add an election';
+		
+		-- E-payments form
+		CREATE TABLE IF NOT EXISTS `epayments` (
+		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
+		  `submittedBy` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Your username (@cam.ac.uk)',
+		  `societyName` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Society name',
+		  `bankAccountName` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Bank account name',
+		  `bankAccountNumber` varchar(8) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Bank account number',
+		  `bankSortCode` varchar(8) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Bank account Sort Code',
+		  `vatRegistered` enum('No','Yes') COLLATE utf8_unicode_ci NOT NULL COMMENT 'Is the society VAT registered?',
+		  `timeEstablished` enum('<6 months','6-24 months','2-5 years','5+ years') COLLATE utf8_unicode_ci NOT NULL COMMENT 'Approximate length of time your society has existed',
+		  `societyAffiliation` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Is the Society affiliated to a specific College or Department?',
+		  `seniorTreasurerUsername` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Senior Treasurer e-mail',
+		  `seniorTreasurerName` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Senior Treasurer name',
+		  `juniorTreasurerUsername` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Junior Treasurer @cam username',
+		  `juniorTreasurerName` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Junior Treasurer name',
+		  `juniorTreasurerPhone` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Junior Treasurer phone number',
+		  `juniorTreasurerCourse` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Junior Treasurer course',
+		  `juniorTreasurerEndDate` date NOT NULL COMMENT 'Junior Treasurer course end date',
+		  `agreeTerms` int(1) NOT NULL COMMENT 'I agree to the Terms below',
+		  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created at (automatic timestamp)',
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Setup epayments for a Society';
 		
 		-- Manager form
 		CREATE TABLE IF NOT EXISTS `manager` (
@@ -242,6 +266,17 @@ class requestForms extends frontControllerApplication
 		$attributes['file']['directory'] = $this->dataDirectory;
 		$attributes['file']['forcedFileName'] = $table . '_' . $this->user . '_' . date ('Y-m-d_H-i-s');
 		$attributes['file']['attachments'] = true;
+		
+		# Table-specific overrides to form structure
+		switch ($table) {
+			case 'epayments':
+				$attributes['societyName']['heading'] = array (2 => 'Society details');
+				$attributes['seniorTreasurerUsername']['heading'] = array (2 => 'Senior Treasurer details');
+				$attributes['juniorTreasurerUsername']['heading'] = array (2 => 'Junior Treasurer details');
+				$attributes['agreeTerms']['heading'] = array (2 => 'Terms and conditions');
+				$attributes['agreeTerms']['title'] = 'I agree to the <a href="' . $this->settings['epaymentsTermsUrl'] . '" target="_blank" title="[Link opens in a new window]">Terms</a>';
+				break;
+		}
 		
 		# Create the databinded form
 		require_once ('ultimateForm.php');
