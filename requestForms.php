@@ -275,7 +275,27 @@ class requestForms extends frontControllerApplication
 		$autocompleteFields = $this->databaseConnection->getFieldnames ($this->settings['database'], $table, false, '[Uu]sername');
 		if ($autocompleteFields) {
 			foreach ($autocompleteFields as $autocompleteField) {
+				
+				# Determine the accompanying name field
+				$nameField = preg_replace ('/^(.+)[Uu]sername$/', '$1', $autocompleteField) . 'Name';
+				
+				# JS function to copy the e-mail address, and extract name and split it into forename and surname; see: http://stackoverflow.com/a/12340803
+				$focusSelectJsFunction = "
+					function( event, ui ) {
+						var name = ui.item.label.replace(/^.+\((.+)\)$/g, '$1');
+						$( '#form_{$autocompleteField}' ).val( ui.item.value " . ($this->emailDomain ? "+ '@{$this->emailDomain}' " : '') . ");
+						$( '#form_{$nameField}' ).val( name );
+					}
+				";
+				$autocompleteOptions = array (
+					'delay'		=> 0,
+					'focus'		=> $focusSelectJsFunction,
+					'select'	=> $focusSelectJsFunction,
+				);
+				
+				# Add the autocomplete to the form specification
 				$attributes[$autocompleteField]['autocomplete'] = $this->baseUrl . '/data.html';
+				$attributes[$autocompleteField]['autocompleteOptions'] = $autocompleteOptions;
 			}
 		}
 		
