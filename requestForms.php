@@ -65,7 +65,7 @@ class requestForms extends frontControllerApplication
 		  `datasourceSocietyCategory` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'societiesdirectory.categories.[id,name]' COMMENT 'Datasource for society form: category',
 		  `datasourceElectionCollege` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'bwp.overview.[college,name]' COMMENT 'Datasource for election form: college',
 		  PRIMARY KEY (`id`)
-		) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Settings';
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Settings';
 		INSERT INTO `settings` (`id`, `feedbackRecipient`, `welcomeTextHtml`) VALUES (1, 'coordinator@" . "cusu.cam.ac.uk', '<p>With these forms, you can request CUSU staff to set up a new section for you on the new CUSU website.</p><p>Please note that requests will only be processed during office hours.</p>');
 
 		-- Election form
@@ -116,6 +116,7 @@ class requestForms extends frontControllerApplication
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
 		  `submittedBy` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Your username (@cam.ac.uk)',
 		  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Your name',
+		  `societyName` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Name of Society',
 		  `confirm` int(1) NOT NULL COMMENT 'I confirm I have the right to administrate this group',
 		  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created at (automatic timestamp)',
 		  PRIMARY KEY (`id`)
