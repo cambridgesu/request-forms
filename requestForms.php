@@ -267,6 +267,14 @@ class requestForms extends frontControllerApplication
 		$attributes['file']['forcedFileName'] = $table . '_' . $this->user . '_' . date ('Y-m-d_H-i-s');
 		$attributes['file']['attachments'] = true;
 		
+		# Add autocomplete to any username fields
+		$autocompleteFields = $this->databaseConnection->getFieldnames ($this->settings['database'], $table, false, '[Uu]sername');
+		if ($autocompleteFields) {
+			foreach ($autocompleteFields as $autocompleteField) {
+				$attributes[$autocompleteField]['autocomplete'] = $this->baseUrl . '/data.html';
+			}
+		}
+		
 		# Table-specific overrides to form structure
 		switch ($table) {
 			case 'epayments':
@@ -348,6 +356,45 @@ class requestForms extends frontControllerApplication
 		
 		# Register the HTML
 		$data['html'] = $html;
+		
+		# Return the data
+		return $data;
+	}
+	
+	
+	# Function to provide autocomplete functionality
+	public function data ()
+	{
+		# Get the data
+		$data = $this->dataLookup ();
+		
+		# Arrange the data
+		$json = json_encode ($data);
+		
+		# Send JSON headers
+		header ('Content-type: application/json; charset=UTF-8');
+		
+		# Allow access only to the current domain, rather than any external site
+		header ('Access-Control-Allow-Origin: ' . $_SERVER['_SITE_URL']);
+		
+		# Send the text
+		echo $json;
+	}
+	
+	
+	# Function to get data from lookup
+	private function dataLookup ()
+	{
+		# Get the search term
+		if (!isSet ($_GET['term']) || !strlen ($_GET['term'])) {return array ('error' => 'No query term was sent');}
+		$term = trim ($_GET['term']);
+		
+		# Get the data
+		require_once ('camUniData.php');
+		$data = camUniData::lookupUsers ($term, true, $indexByUsername = true);
+		
+		# Remove keys so that they are indexed numerically
+		$data = array_values ($data);
 		
 		# Return the data
 		return $data;
