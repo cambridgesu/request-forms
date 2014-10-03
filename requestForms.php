@@ -118,6 +118,7 @@ class requestForms extends frontControllerApplication
 		  `submittedBy` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Your username (@cam.ac.uk)',
 		  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Your name',
 		  `societyName` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Name of Society',
+		  `isRegistered` enum('','Yes','No') COLLATE utf8_unicode_ci NOT NULL COMMENT 'Is your Society registered with the Societies Syndicate?',
 		  `confirm` int(1) NOT NULL COMMENT 'I confirm I have the right to administrate this group',
 		  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created at (automatic timestamp)',
 		  PRIMARY KEY (`id`)
@@ -126,14 +127,15 @@ class requestForms extends frontControllerApplication
 		-- Society form
 		CREATE TABLE IF NOT EXISTS `society` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key',
-		  `submittedBy` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Your username (@cam.ac.uk)',
+		  `submittedBy` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Your username (@cam.ac.uk)''',
 		  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Society name',
 		  `category` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Category',
 		  `description` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Description',
 		  `websiteUrl` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Website',
 		  `facebookUrl` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Facebook page',
 		  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'E-mail address of society',
-		  `sellMemberships` enum('','Yes','No','Not sure') COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Do you wish to sell memberships to your group online?',
+		  `isRegistered` enum('','Registered','Not registered') COLLATE utf8_unicode_ci NOT NULL COMMENT 'Is your Society registered with the Societies Syndicate?',
+		  `sellMemberships` enum('','Yes','No','Not sure','Not applicable - unregistered society') COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Do you wish to sell memberships to your group online? (Available only to registered societies.)',
 		  `membershipCost` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Cost of membership',
 		  `membershipLength` enum('','Annual','Term') COLLATE utf8_unicode_ci NOT NULL COMMENT 'Length of memberships to be available',
 		  `person` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Society Administrator/President (full name required)',
