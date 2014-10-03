@@ -59,7 +59,8 @@ class requestForms extends frontControllerApplication
 		-- Settings
 		CREATE TABLE IF NOT EXISTS `settings` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Automatic key (ignored)',
-		  `feedbackRecipient` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'E-mail of feedback recipient',
+		  `feedbackRecipient` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'E-mail of form recipient',
+		  `feedbackRecipientEpayments` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'E-mail of e-payments form recipient',
 		  `welcomeTextHtml` text COLLATE utf8_unicode_ci COMMENT 'HTML fragment for welcome text',
 		  `epaymentsTermsUrl` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'E-payments terms URL',
 		  `datasourceSocietyCategory` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'societiesdirectory.categories.[id,name]' COMMENT 'Datasource for society form: category',
@@ -287,6 +288,13 @@ class requestForms extends frontControllerApplication
 				break;
 		}
 		
+		# Determine the form recipient
+		$formRecipient = $this->settings['feedbackRecipient'];
+		$tableSpecificSetting = 'feedbackRecipient' . ucfirst ($table);
+		if (isSet ($this->settings[$tableSpecificSetting])) {
+			$formRecipient = $this->settings[$tableSpecificSetting];
+		}
+		
 		# Create the databinded form
 		require_once ('ultimateForm.php');
 		$form = new form (array (
@@ -305,7 +313,7 @@ class requestForms extends frontControllerApplication
 			'int1ToCheckbox' => true,
 			'attributes' => $attributes,
 		));
-		$form->setOutputEmail ($this->settings['feedbackRecipient'], $this->settings['administratorEmail'], 'Website request form: ' . $this->forms[$table], NULL, 'submittedBy');
+		$form->setOutputEmail ($formRecipient, $this->settings['administratorEmail'], 'Website request form: ' . $this->forms[$table], NULL, 'submittedBy');
 		if (!$result = $form->process ($html)) {
 			echo $html;
 			return;
